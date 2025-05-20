@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Project Overview
+## Project Overview
 
 This repository implements a **semantic segmentation** pipeline using a **UNet** model with a **ResNet34** backbone (pre-trained on ImageNet). The goal is to segment images into multiple classes (e.g., roads, vegetation, buildings, etc.) based on provided annotation masks.
 
@@ -21,7 +21,7 @@ Key steps include:
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 ├── Project_Exhibition_1.ipynb   # Main Jupyter notebook
@@ -41,7 +41,7 @@ Key steps include:
 
 ---
 
-## 🔧 Environment Setup
+## Environment Setup
 
 1. **Clone the repository**  
    ```bash
@@ -68,7 +68,7 @@ Key steps include:
 
 ---
 
-## 📥 Data Loading & Preprocessing
+## Data Loading & Preprocessing
 
 Open `Project_Exhibition_1.ipynb` and run:
 
@@ -105,7 +105,7 @@ Open `Project_Exhibition_1.ipynb` and run:
 
 ---
 
-## 🏷 Mask Encoding & One-Hot Conversion
+## Mask Encoding & One-Hot Conversion
 
 1. **Load Class-RGB Mapping**:
    ```python
@@ -135,7 +135,7 @@ Open `Project_Exhibition_1.ipynb` and run:
 
 ---
 
-## ✂️ Train/Test Split
+## Train/Test Split
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -149,7 +149,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ---
 
-## 🔨 Model Definition & Training
+## Model Definition & Training
 
 1. **Set Backbone & Preprocessing**:
    ```python
@@ -202,7 +202,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ---
 
-## 🔍 Evaluation & Inference
+## Evaluation & Inference
 
 1. **Load Best Model**:
    ```python
@@ -226,7 +226,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ---
 
-## 📈 Results & Metrics
+## Results & Metrics
 
 - **Training Accuracy**: typically > 90% on small datasets (monitor for overfitting).  
 - **Validation Accuracy**: best checkpoint saved at ~X% (varies by data).  
@@ -240,7 +240,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ---
 
-## 🚀 Usage
+## Usage
 
 1. **Populate** `dataset/Images` and `dataset/Annotations`.  
 2. **Adjust** paths in the notebook (e.g., mount points).  
@@ -249,12 +249,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Feel free to submit issues or pull requests. Fork the repo, create a branch, and open a PR.
 
 ---
 
-## 📜 License
+## License
 
 Released under the **MIT License**. See [LICENSE](LICENSE) for details.
