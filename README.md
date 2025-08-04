@@ -214,8 +214,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ## Results & Metrics
 
-- **Training Accuracy**: typically > 90% on small datasets (monitor for overfitting).  
-- **Validation Accuracy**: best checkpoint saved at ~X% (varies by data).  
+- **Training Accuracy**: typically ~90% on the dataset (monitor for overfitting).  
+- **Validation Accuracy**: best checkpoint saved at ~86% (varies by data).  
 - **MeanIoU**: can be computed via:
   ```python
   from tensorflow.keras.metrics import MeanIoU
@@ -227,11 +227,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 ---
 
 ## Usage
-
-1. **Populate** `dataset/Images` and `dataset/Annotations`.  
-2. **Adjust** paths in the notebook (e.g., mount points).  
-3. **Run** cells in `Project_Exhibition_1.ipynb` sequentially.  
-4. **Monitor** GPU usage—training can be accelerated on a GPU runtime (e.g., Colab, AWS).
+  
+1. **Adjust** paths in the notebook (e.g., mount points).  
+2. **Run** cells in `Project_Exhibition_1.ipynb` sequentially.  
+3. **Monitor** GPU usage—training can be accelerated on a GPU runtime (e.g., Colab, AWS).
 
 ---
 
