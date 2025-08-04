@@ -1,6 +1,6 @@
 # Drone Image : Semantic Segmentation with ResNet34-UNet
 
-[![Python](https://img.shields.io/badge/Python-3.7%2B-blue)](https://www.python.org/)  [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)  [![Build Status](https://img.shields.io/badge/Notebook-Ready-yellow)]()
+[![Python](https://img.shields.io/badge/Python-3.7%2B-blue)](https://www.python.org/)  [![Build Status](https://img.shields.io/badge/Notebook-Ready-yellow)]()
 
 ---
 
@@ -25,18 +25,10 @@ Key steps include:
 
 ```text
 ├── Project_Exhibition_1.ipynb   # Main Jupyter notebook
-├── requirements.txt            # Python dependencies
-├── models/                     # Trained model checkpoints
-│   └── resnet_backbone.hdf5
-├── dataset/                    # (Not included)  
-│   ├── Images/                 # Raw input images
-│   └── Annotations/            # Corresponding segmentation masks
-├── class_dict.csv              # CSV mapping class names to RGB values
-├── README.md                   # This file
-└── LICENSE                     # Project license (MIT)
+└── README.md                   # This file
 ```
 
-> **Note:** The `dataset/` folder is **not** included in the repo.  
+> **Note:** The `dataset/` folder is **not** included in the repo. Download from [Dataset Link](http://dronedataset.icg.tugraz.at/).   
 > Please mount or symlink your data in the notebook (e.g., via Google Drive).
 
 ---
@@ -55,13 +47,7 @@ Key steps include:
    source venv/bin/activate
    ```
 
-3. **Install dependencies**  
-   ```bash
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-
-4. **Additional pip installs** (if not in `requirements.txt`):  
+4. **pip dependencies install**
    ```bash
    pip install patchify keras tensorflow opencv-python keras-segmentation segmentation_models
    ```
@@ -254,7 +240,3 @@ X_train, X_test, y_train, y_test = train_test_split(
 Feel free to submit issues or pull requests. Fork the repo, create a branch, and open a PR.
 
 ---
-
-## License
-
-Released under the **MIT License**. See [LICENSE](LICENSE) for details.
