@@ -56,7 +56,7 @@ Key steps include:
 
 ## Data Loading & Preprocessing
 
-Open `Project_Exhibition_1.ipynb` and run:
+Open `Drone_Image_Segmenter.ipynb` and run:
 
 1. **Mount your drive** (for Colab):
    ```python
@@ -70,13 +70,24 @@ Open `Project_Exhibition_1.ipynb` and run:
    import cv2, os
 
    def data_loader(folder_dir):
-       images = []
-       for filename in os.listdir(folder_dir):
-           img = cv2.imread(os.path.join(folder_dir, filename))
-           img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-           images.append(img)
-       return images
-
+       image_dataset = []
+       file_list = sorted(os.listdir(folder_dir))
+   
+       for images in file_list:
+           image_path = os.path.join(folder_dir, images)
+           image = cv2.imread(image_path, 1)
+           if image is not None:
+               image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+               image = cv2.resize(image, (128, 128))
+               image = Image.fromarray(image)
+               image = np.array(image)
+               image_dataset.append(image)
+           else:
+               print(f"Warning: Could not load {image_path}")
+   
+       print(f"Loaded {len(image_dataset)} images from {folder_dir}")
+       return image_dataset
+   
    image_dataset = np.array(data_loader('/content/gdrive/MyDrive/Project/dataset/Images'))
    mask_dataset  = np.array(data_loader('/content/gdrive/MyDrive/Project/dataset/Annotations'))
    ```
@@ -84,9 +95,15 @@ Open `Project_Exhibition_1.ipynb` and run:
 3. **Visual Sanity Check**:
    ```python
    import matplotlib.pyplot as plt
-   idx = np.random.randint(len(image_dataset))
-   plt.subplot(1,2,1); plt.imshow(image_dataset[idx])
-   plt.subplot(1,2,2); plt.imshow(mask_dataset[idx]); plt.show()
+   image_number = random.randint(0, len(mask_dataset)-1)
+   plt.figure(figsize=(12, 6))
+   plt.subplot(121)
+   plt.title(f'Original Image {image_number}')
+   plt.imshow(image_dataset[image_number])
+   plt.subplot(122)
+   plt.title(f'Corresponding Mask {image_number}')
+   plt.imshow(mask_dataset[image_number])
+   plt.show()
    ```
 
 ---
@@ -101,20 +118,27 @@ Open `Project_Exhibition_1.ipynb` and run:
 
 2. **Convert RGB Masks to Label Indices**:
    ```python
-   def rgb_to_labels(img, label_df):
-       label_seg = np.zeros(img.shape[:2], dtype=np.uint8)
-       for i, row in label_df.iterrows():
-           rgb = list(row[['r','g','b']])
-           label_seg[np.all(img == rgb, axis=-1)] = i
+   def rgb_to_labels(img, mask_labels):
+       label_seg = np.zeros(img.shape, dtype=np.uint8)
+       for i in range(mask_labels.shape[0]):
+           label_seg[np.all(img == list(mask_labels.iloc[i, [1,2,3]]), axis=-1)] = i
+       label_seg = label_seg[:,:,0]
        return label_seg
 
-   labels = np.array([rgb_to_labels(m, mask_labels) for m in mask_dataset])
-   labels = labels[..., np.newaxis]
+   labels = []
+   for i in range(mask_dataset.shape[0]):
+       label = rgb_to_labels(mask_dataset[i], mask_labels)
+       labels.append(label)
+       
+   labels = np.array(labels)
+   labels = np.expand_dims(labels, axis=3)
+   
+   print("Unique labels in dataset:", np.unique(labels))   
    ```
 
 3. **One-Hot Encode**:
    ```python
-   from tensorflow.keras.utils import to_categorical
+   # One-hot encoding
    n_classes = len(np.unique(labels))
    labels_cat = to_categorical(labels, num_classes=n_classes)
    ```
@@ -123,15 +147,13 @@ Open `Project_Exhibition_1.ipynb` and run:
 
 ## Train/Test Split
 
-```python
-from sklearn.model_selection import train_test_split
-
-X_train, X_test, y_train, y_test = train_test_split(
-    image_dataset, labels_cat,
-    test_size=0.2,
-    random_state=42
-)
-```
+   ```python
+   from sklearn.model_selection import train_test_split
+   
+   X_train, X_test, y_train, y_test = train_test_split(
+       image_dataset, labels_cat, test_size=0.20, random_state=42
+   )
+   ```
 
 ---
 
@@ -144,8 +166,8 @@ X_train, X_test, y_train, y_test = train_test_split(
    BACKBONE = 'resnet34'
    preprocess_input = sm.get_preprocessing(BACKBONE)
 
-   X_train_p = preprocess_input(X_train)
-   X_test_p  = preprocess_input(X_test)
+   X_train_prepr = preprocess_input(X_train)
+   X_test_prepr = preprocess_input(X_test)
    ```
 
 2. **Build UNet**:
