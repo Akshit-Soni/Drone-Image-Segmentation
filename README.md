@@ -197,10 +197,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 2. **Predict & Visualize**:
    ```python
    idx = np.random.randint(len(X_test))
-   y_pred = model.predict(X_test[idx][None, ...])
-   y_pred_idx = np.argmax(y_pred[0], axis=-1)
-   y_true_idx = np.argmax(y_test[idx], axis=-1)
-
+   y_pred = model_resnet_backbone.predict(X_test_prepr)
+   y_pred_argmax = np.argmax(y_pred, axis=3)
+   y_test_argmax = np.argmax(y_test, axis=3)
+   
    plt.figure(figsize=(15,5))
    plt.subplot(1,3,1); plt.imshow(X_test[idx]);       plt.title('Input')
    plt.subplot(1,3,2); plt.imshow(y_true_idx);       plt.title('Ground Truth')
