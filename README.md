@@ -24,7 +24,7 @@ Key steps include:
 ## Repository Structure
 
 ```text
-├── Project_Exhibition_1.ipynb   # Main Jupyter notebook
+├── Drone_Image_Segmenter.ipynb   # Main Jupyter notebook
 └── README.md                   # This file
 ```
 
@@ -37,8 +37,8 @@ Key steps include:
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/yourusername/semantic-segmentation.git
-   cd semantic-segmentation
+   git clone https://github.com/Akshit-Soni/Drone-Image-Segmentation.git
+   cd Drone-Image-Segmentation
    ```
 
 2. **Create & activate a virtual environment**  
@@ -49,7 +49,7 @@ Key steps include:
 
 4. **pip dependencies install**
    ```bash
-   pip install patchify keras tensorflow opencv-python keras-segmentation segmentation_models
+   !pip install patchify keras==2.15.0 tensorflow==2.15.0 opencv-python tqdm pillow scikit-learn random pickle keras-segmentation segmentation_models==1.0.1 efficientnet==1.1.1 
    ```
 
 ---
@@ -166,15 +166,13 @@ X_train, X_test, y_train, y_test = train_test_split(
        metrics=['accuracy']
    )
 
-   history = model.fit(
-       X_train_p, y_train,
-       validation_data=(X_test_p, y_test),
-       epochs=100,
+   history = model_resnet_backbone.fit(
+       X_train_prepr,
+       y_train,
        batch_size=16,
-       callbacks=[
-           EarlyStopping(patience=10, restore_best_weights=True),
-           ModelCheckpoint('models/resnet_backbone.hdf5', save_best_only=True)
-       ]
+       epochs=100,
+       verbose=1,
+       validation_data=(X_test_prepr, y_test)
    )
    ```
 
@@ -214,13 +212,13 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ## Results & Metrics
 
-- **Training Accuracy**: typically ~90% on the dataset (monitor for overfitting).  
-- **Validation Accuracy**: best checkpoint saved at ~86% (varies by data).  
+- **Training Accuracy**: typically ~93% on the dataset (monitor for overfitting).  
+- **Validation Accuracy**: best recorded at ~80% (varies by data).  
 - **MeanIoU**: can be computed via:
   ```python
   from tensorflow.keras.metrics import MeanIoU
   miou = MeanIoU(num_classes=n_classes)
-  miou.update_state(y_true_idx.flatten(), y_pred_idx.flatten())
+  miou.update_state(y_test_argmax.flatten(), y_pred_argmax.flatten())
   print("Mean IoU =", miou.result().numpy())
   ```
 
